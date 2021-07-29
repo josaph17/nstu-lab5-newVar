@@ -3,8 +3,6 @@
 оставшиеся элементы включаются в полученную упорядоченную последовательность методом погружения.*/
 #include <stdio.h>
 #include <locale.h>
-#include<stdlib.h>
-#include<stdbool.h>
 #define N 8
 
 void ShowArray(int A[], int n);
@@ -16,7 +14,7 @@ int main()
 	printf("First array Arr: \n");
 	ShowArray(Arr, N);
     int length = habrLength(Arr, N);
-    printf("Длина максимально длинной послед-и: %d\n", length);	
+    printf("Длина максимально длинной послед-и: %d\n", length);	 //max length: %d
 	return 0;
 }
 
