@@ -8,7 +8,7 @@
 
 void ShowArray(int A[], int n);
 void habrLength(int arr[], int n);
-void recoverSeq(int in[], int indexes[], int n, int max);
+void recoverSeq(int *in, int indexes[], int n, int max);
 int main()
 {
 	setlocale(LC_ALL, "");
@@ -16,6 +16,8 @@ int main()
 	printf("First array Arr: \n");
 	ShowArray(Arr, N);
     habrLength(Arr, N);
+    printf("\nchanged Arr[] : \n");
+    ShowArray(Arr, N);
 	return 0;
 }
 
@@ -58,7 +60,7 @@ void habrLength(int arr[], int n)
     recoverSeq(arr, counts, n, maximum);
 }
 
-void recoverSeq(int in[], int indexes[],  int n, int max)
+void recoverSeq(int *in, int indexes[],  int n, int max)
 {
     int out[N];
 
@@ -82,12 +84,14 @@ void recoverSeq(int in[], int indexes[],  int n, int max)
                 if ((indexes[j] < indexes[r]) && (in[j] > last))
                 {
                     out[p] = in[j];
+                    in[j]= -1;
                     last = out[p];
                     p++;
                 }
-                else if ((in[j] > last)) /*if index = last*/
+                else if ((indexes[j]==max) && (in[j] > last)) /*if index = last*/
                 {
                     out[p] = in[j];
+                    in[j] = -1;
                 }
             }
         }
