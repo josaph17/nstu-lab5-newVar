@@ -36,10 +36,10 @@ void habrLength(int arr[], int n)
         counts[i] = 0;
 
     for (int j = 1; j < n; j++) {
-        for (int i = 0; i < j; i++) { /*идем по j*/
+        for (int i = 0; i < j; i++) { 
             if (arr[j] > arr[i]) {
-                if (counts[j] <= counts[i]) { /*если индекс послед эл-а равен или больше i*/
-                    counts[j] = counts[i] + 1; /*индекс эл-а возр. подпослед-и, оканчиваюшейся на данный элемент*/
+                if (counts[j] <= counts[i]) { /*if index of sequence >= i*/
+                    counts[j] = counts[i] + 1; /*index of element of growing subSequence, which finished on this element*/
                 }
             }
         }
