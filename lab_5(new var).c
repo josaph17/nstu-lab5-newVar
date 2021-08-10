@@ -4,20 +4,22 @@
 #include <stdio.h>
 #include <locale.h>
 #include <limits.h>
+#include <malloc.h>
+
 #define N 8
 
 void ShowArray(int A[], int n);
-void habrLength(int arr[], int n);
-void recoverSeq(int *in, int indexes[], int n, int max);
+void cleverSort(int arr[], int n);
+int createRecoverSeq(int *in, int indexes[], int n, int max);
+
 int main()
 {
 	setlocale(LC_ALL, "");
+
 	int Arr[N] = { 5, 10,6,12,3,24,7,8};
-	printf("First array Arr: \n");
-	ShowArray(Arr, N);
-    habrLength(Arr, N);
-    printf("\nchanged Arr[] : \n");
-    ShowArray(Arr, N);
+
+    cleverSort(Arr, N);
+
 	return 0;
 }
 
@@ -31,7 +33,7 @@ void ShowArray(int A[], int n)
 	printf("\n");
 }
 
-void habrLength(int arr[], int n)
+void cleverSort(int arr[], int n)
 {
     int counts[N];
     for (int i = 0; i < n; ++i)
@@ -55,31 +57,43 @@ void habrLength(int arr[], int n)
             maximum = counts[i];
     }
 
-    printf("\nВеличина максимального индекса: %d\n", maximum);	 //max length: %d
+    printf("Arr[]: \n");
+    ShowArray(arr, n);
+    printf("counts[]: \n");
+    ShowArray(counts, n);
+    
+    maximum++; /*count of elements in rising subSeq*/
 
-    recoverSeq(arr, counts, n, maximum);
+    printf("\nCount of elements in max rising subSeq: %d\n", maximum);
+
+    int seq = createRecoverSeq(arr, counts, n, maximum);
+
+    printf("\nArray from createRecoverSeq: \n");
+    ShowArray(seq, maximum);
+    printf("Changed Arr[]: \n");
+    ShowArray(arr, N);
 }
 
-void recoverSeq(int *in, int indexes[],  int n, int max)
+int createRecoverSeq(int *in, int indexes[],  int n, int max)
 {
-    int out[N];
+    int *out = (int*)malloc(max * sizeof(int));
 
-    for (int i = 0; i < n; ++i)
+    if (NULL == out) /*check pointer, cause pointer can return malloc */
+        return NULL; /*OS don't gave memory*/
+
+    for (int i = 0; i < max; i++)
         out[i] = INT_MIN;
 
-    int p=0;
-    int last = INT_MIN;
+    int maxIndex = max - 1; /*value of max index  in indexes[]*/
 
-    printf("\nin[] : \n");
-    ShowArray(in, n);
-    printf("indexes[] : \n");
-    ShowArray(indexes, n);
+    int p = 0;
+    int last = INT_MIN;
 
     for (int j = 0; j < n-1; j++)
     {
         for (int r = j+1; r < n; r++) 
         {
-            if (indexes[r] <= max)
+            if (indexes[r] <= maxIndex)
             {
                 if ((indexes[j] < indexes[r]) && (in[j] > last))
                 {
@@ -88,16 +102,14 @@ void recoverSeq(int *in, int indexes[],  int n, int max)
                     last = out[p];
                     p++;
                 }
-                else if ((indexes[j]==max) && (in[j] > last)) /*if index = last*/
+                else if ((indexes[j]== maxIndex) && (in[j] > last)) /*if index = maxIndex =3*/
                 {
                     out[p] = in[j];
                     in[j] = -1;
                 }
             }
         }
-            
     }
 
-    printf("\nRecover Sequence out[]: \n");
-    ShowArray(out, N);
+    return out;
 }
