@@ -10,8 +10,8 @@
 
 void ShowArray(int A[], int n);
 void cleverSort(int arr[], int n);
-//int createRecoverSeq(int *in, int indexes[], int n, int max);
 void reverseSeq(int *in, int n);
+void compareArrs(int *in, int in2[], int n, int n2);
 int createRecoverSeq2(int *in, int indexes[], int n, int max);
 
 int main()
@@ -73,49 +73,10 @@ void cleverSort(int arr[], int n)
 
     printf("\nArray from createRecoverSeq: \n");
     ShowArray(seq, maximum);
+    compareArrs(arr, seq, n, maximum);
     printf("Changed Arr[]: \n");
     ShowArray(arr, N);
 }
-
-//int createRecoverSeq(int *in, int indexes[],  int n, int max)
-//{
-//    int *out = (int*)malloc(max * sizeof(int));
-//
-//    if (NULL == out) /*check pointer, cause pointer can return malloc */
-//        return NULL; /*OS don't gave memory*/
-//
-//    for (int i = 0; i < max; i++)
-//        out[i] = INT_MIN;
-//
-//    int maxIndex = max - 1; /*value of max index  in indexes[]*/
-//
-//    int p = 0;
-//    int last = INT_MIN;
-//
-//    for (int j = 0; j < n-1; j++)
-//    {
-//        for (int r = j+1; r < n-1; r++) 
-//        {
-//            if (indexes[r] <= maxIndex)
-//            {
-//                if ((indexes[j] < indexes[r]) && (in[j] > last))
-//                {
-//                    out[p] = in[j];
-//                    in[j]= -1;
-//                    last = out[p];
-//                    p++;
-//                }
-//                else if ((indexes[j]== maxIndex) && (in[j] > last)) /*if index = maxIndex =3*/
-//                {
-//                    out[p] = in[j];
-//                    in[j] = -1;
-//                }
-//            }
-//        }
-//    }
-//
-//    return out;
-//}
 
 void reverseSeq(int *in, int n)
 {
@@ -126,6 +87,14 @@ void reverseSeq(int *in, int n)
         in[i] = in[j]; 
         in[j] = k;
     }
+}
+
+void compareArrs(int* in, int in2[], int n, int n2)
+{
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n2; j++)
+            if (in[i] == in2[j])
+                in[i] = -1;
 }
 
 int createRecoverSeq2(int* in, int indexes[], int n, int max)
@@ -149,29 +118,23 @@ int createRecoverSeq2(int* in, int indexes[], int n, int max)
         {
             if (indexes[r] <= maxIndex)
             {
-                if ((indexes[j] == maxIndex) && (in[j] < last)) /*if index = maxIndex =3*/
+                if ((indexes[j] == maxIndex) && (in[j] < last)) /*if index = maxIndex*/
                 {
                     out[p] = in[j];
-                    //in[j] = -1;
                     last = out[p];
                     p++;
-                    ShowArray(out, max);
                 }
                 else if ((indexes[j] == indexes[r]) && (in[j] < last))
                 {
                     out[p] = in[j];
-                    //in[j] = -1;
                     last = out[p];
                     p++;
-                    ShowArray(out, max);
                 }
                 else if ((indexes[j] == indexes[r]+1) && (in[j] < last))
                 {
                     out[p] = in[j];
-                    //in[j] = -1;
                     last = out[p];
                     p++;
-                    ShowArray(out, max);
                 }  
             }
         }
@@ -180,7 +143,6 @@ int createRecoverSeq2(int* in, int indexes[], int n, int max)
     if ((indexes[0] == 0) && (in[0] < last))
     {
         out[p] = in[0];
-        //ShowArray(out, max);
     }
 
     reverseSeq(out, max);
