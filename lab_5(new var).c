@@ -18,8 +18,8 @@ int main()
 {
 	setlocale(LC_ALL, "");
 
-	//int Arr[N] = { 5, 10,6,12,3,24,7,8};
-    int Arr[N] = { 5, 10,6,12,3,7,8,24 };
+	int Arr[N] = { 5, 10,6,12,3,24,7,8};
+    //int Arr[N] = { 5, 10,6,12,3,7,8,24 };
 
     cleverSort(Arr, N);
 
@@ -136,12 +136,12 @@ int createRecoverSeq2(int* in, int indexes[], int n, int max)
         return NULL; /*OS don't gave memory*/
 
     for (int i = 0; i < max; i++)
-        out[i] = INT_MIN;
+        out[i] = INT_MAX;
 
     int maxIndex = max - 1; /*value of max index  in indexes[]*/
 
     int p = 0;
-    int last = INT_MIN;
+    int last = INT_MAX;
 
     for (int j = n - 1; j > 0; j--)
     {
@@ -149,13 +149,13 @@ int createRecoverSeq2(int* in, int indexes[], int n, int max)
         {
             if (indexes[r] <= maxIndex)
             {
-                if ((indexes[j] == maxIndex) && (in[j] > last)) /*if index = maxIndex =3*/
+                if ((indexes[j] == maxIndex) && (in[j] < last)) /*if index = maxIndex =3*/
                 {
                     out[p] = in[j];
                     //in[j] = -1;
                     last = out[p];
                     p++;
-                    //ShowArray(out, max);
+                    ShowArray(out, max);
                 }
                 else if ((indexes[j] == indexes[r]) && (in[j] < last))
                 {
@@ -163,7 +163,7 @@ int createRecoverSeq2(int* in, int indexes[], int n, int max)
                     //in[j] = -1;
                     last = out[p];
                     p++;
-                    //ShowArray(out, max);
+                    ShowArray(out, max);
                 }
                 else if ((indexes[j] == indexes[r]+1) && (in[j] < last))
                 {
@@ -171,7 +171,7 @@ int createRecoverSeq2(int* in, int indexes[], int n, int max)
                     //in[j] = -1;
                     last = out[p];
                     p++;
-                    //ShowArray(out, max);
+                    ShowArray(out, max);
                 }  
             }
         }
@@ -180,7 +180,7 @@ int createRecoverSeq2(int* in, int indexes[], int n, int max)
     if ((indexes[0] == 0) && (in[0] < last))
     {
         out[p] = in[0];
-        ShowArray(out, max);
+        //ShowArray(out, max);
     }
 
     reverseSeq(out, max);
