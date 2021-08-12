@@ -6,13 +6,12 @@
 #include <limits.h>
 #include <malloc.h>
 
-#define N 8
+#define N 8  
 
-void ShowArray(int A[], int n);
-void cleverSort(int arr[], int n);
-void reverseSeq(int *in, int n);
-void compareArrs(int *in, int in2[], int n, int n2);
-void VictorRecoverSeq(int* in, int indexes[], int n, int max);
+void ShowArray(int in[], int n);
+void cleverSort(int *in, int* in2, int n);
+void recoverRisingSubSeq(int in[], int* in2, int indexes[], int n, int maxIndex);
+void compareArrs(int* in, int in2[], int n);
 
 int main()
 {
@@ -21,23 +20,24 @@ int main()
     //int Arr[N] = { 5,10,6,12,3,24,25,7,8 };
 	//int Arr[N] = { 5,10,6,12,3,24,7,8};
     int Arr[N] = { 5,10,6,12,3,7,8,24 };
+    int Arr2[N];
 
-    cleverSort(Arr, N);
+    cleverSort(Arr,Arr2, N);
 
 	return 0;
 }
 
-void ShowArray(int A[], int n)
+void ShowArray(int in[], int n)
 {
 	int i;
 	for (i = 0; i < n; i++)
 	{
-		printf("%d ", A[i]);
+		printf("%d ", in[i]);
 	}
 	printf("\n");
 }
 
-void cleverSort(int arr[], int n)
+void cleverSort(int* in, int* in2, int n)
 {
     int counts[N];
     for (int i = 0; i < n; ++i)
@@ -45,7 +45,7 @@ void cleverSort(int arr[], int n)
 
     for (int j = 1; j < n; j++) {
         for (int i = 0; i < j; i++) { 
-            if (arr[j] > arr[i]) {
+            if (in[j] > in[i]) {
                 if (counts[j] <= counts[i]) { /*if index of sequence >= i*/
                     counts[j] = counts[i] + 1; /*index of element of growing subSequence, which finished on this element*/
                 }
@@ -62,49 +62,26 @@ void cleverSort(int arr[], int n)
     }
 
     printf("Arr[]: \n");
-    ShowArray(arr, n);
+    ShowArray(in, n);
     printf("counts[]: \n");
     ShowArray(counts, n);
     
-    maximum++; /*count of elements in rising subSeq*/
+    printf("\nCount of elements in max rising subSeq: %d\n", maximum+1);
 
-    printf("\nCount of elements in max rising subSeq: %d\n", maximum);
+    recoverRisingSubSeq(in, in2, counts, n, maximum);
 
-    VictorRecoverSeq(arr, counts, n, maximum);
+    compareArrs(in, in2, n);
 
-    printf("Changed Arr[]: \n");
-    ShowArray(arr, N);
+    printf("\nChanged Arr[]: \n");
+    ShowArray(in, n);
+    printf("After func. recoverRisingSubSeq Arr2[]: \n");
+    ShowArray(in2, n);
 }
 
-void reverseSeq(int *in, int n)
+void recoverRisingSubSeq(int in[], int* in2, int indexes[], int n, int maxIndex)
 {
-    int i, j, k;
-    for (i = 0, j = n - 1; i < j; i++, j--)
-    {
-        k = in[i];
-        in[i] = in[j]; 
-        in[j] = k;
-    }
-}
-
-void compareArrs(int* in, int in2[], int n, int n2)
-{
-    for (int i = 0; i < n; ++i)
-        for (int j = 0; j < n2; j++)
-            if (in[i] == in2[j])
-                in[i] = -1;
-}
-
-void VictorRecoverSeq(int* in, int indexes[], int n, int max)
-{
-    int* out = (int*)malloc(max * sizeof(int));
-
-    if (NULL == out) /*check pointer, cause pointer can return malloc */
-        return NULL; /*OS don't gave memory*/
-
     int j;
     int attn=0;
-    int maxIndex = max - 1; /*value of max index  in indexes[]*/
     int last_index;
     int last_out;
 
@@ -112,8 +89,8 @@ void VictorRecoverSeq(int* in, int indexes[], int n, int max)
         if (indexes[j] == maxIndex)
         {
             last_index = indexes[j];
-            out[maxIndex] = in[j];
-            last_out = out[last_index];
+            in2[maxIndex] = in[j];
+            last_out = in2[last_index];
             attn = 1;
         }
 
@@ -121,11 +98,15 @@ void VictorRecoverSeq(int* in, int indexes[], int n, int max)
         if ((indexes[j]+1 == last_index) && (in[j]< last_out))
         {
             last_index = indexes[j];
-            out[last_index] = in[j];
-            last_out = out[last_index];
+            in2[last_index] = in[j];
+            last_out = in2[last_index];
         }
+}
 
-    printf("\nRecover Sequence out[]: \n");
-    ShowArray(out, max);
-    compareArrs(in, out, n, max); 
+void compareArrs(int* in, int in2[], int n)
+{
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; j++)
+            if (in[i] == in2[j])
+                in[i] = -1;
 }
