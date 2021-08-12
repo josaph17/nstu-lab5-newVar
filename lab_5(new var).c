@@ -6,22 +6,21 @@
 #include <limits.h>
 #include <malloc.h>
 
-#define N 9
+#define N 8
 
 void ShowArray(int A[], int n);
 void cleverSort(int arr[], int n);
 void reverseSeq(int *in, int n);
 void compareArrs(int *in, int in2[], int n, int n2);
-int createRecoverSeq2(int *in, int indexes[], int n, int max);
 void VictorRecoverSeq(int* in, int indexes[], int n, int max);
 
 int main()
 {
 	setlocale(LC_ALL, "");
 
+    //int Arr[N] = { 5,10,6,12,3,24,25,7,8 };
 	//int Arr[N] = { 5,10,6,12,3,24,7,8};
-    //int Arr[N] = { 5,10,6,12,3,7,8,24 };
-    int Arr[N] = { 5,10,6,12,3,24,25,7,8 };
+    int Arr[N] = { 5,10,6,12,3,7,8,24 };
 
     cleverSort(Arr, N);
 
@@ -71,12 +70,8 @@ void cleverSort(int arr[], int n)
 
     printf("\nCount of elements in max rising subSeq: %d\n", maximum);
 
-    //int seq = createRecoverSeq2(arr, counts, n, maximum);
     VictorRecoverSeq(arr, counts, n, maximum);
 
-   /* printf("\nArray from createRecoverSeq: \n");
-    ShowArray(seq, maximum);
-    compareArrs(arr, seq, n, maximum);*/
     printf("Changed Arr[]: \n");
     ShowArray(arr, N);
 }
@@ -98,59 +93,6 @@ void compareArrs(int* in, int in2[], int n, int n2)
         for (int j = 0; j < n2; j++)
             if (in[i] == in2[j])
                 in[i] = -1;
-}
-
-int createRecoverSeq2(int* in, int indexes[], int n, int max)
-{
-    int* out = (int*)malloc(max * sizeof(int));
-
-    if (NULL == out) /*check pointer, cause pointer can return malloc */
-        return NULL; /*OS don't gave memory*/
-
-    for (int i = 0; i < max; i++)
-        out[i] = INT_MAX;
-
-    int maxIndex = max - 1; /*value of max index  in indexes[]*/
-
-    int p = 0;
-    int last = INT_MAX;
-
-    for (int j = n - 1; j > 0; j--)
-    {
-        for (int r = j-1; r > 0; r--)
-        {
-            if (indexes[r] <= maxIndex)
-            {
-                if ((indexes[j] == maxIndex) && (in[j] < last)) /*if index = maxIndex*/
-                {
-                    out[p] = in[j];
-                    last = out[p];
-                    p++;
-                }
-                else if ((indexes[j] == indexes[r]) && (in[j] < last))
-                {
-                    out[p] = in[j];
-                    last = out[p];
-                    p++;
-                }
-                else if ((indexes[j] == indexes[r]+1) && (in[j] < last))
-                {
-                    out[p] = in[j];
-                    last = out[p];
-                    p++;
-                }  
-            }
-        }
-    }
-
-    if ((indexes[0] == 0) && (in[0] < last))
-    {
-        out[p] = in[0];
-    }
-
-    reverseSeq(out, max);
-
-    return out;
 }
 
 void VictorRecoverSeq(int* in, int indexes[], int n, int max)
@@ -175,8 +117,6 @@ void VictorRecoverSeq(int* in, int indexes[], int n, int max)
             last_out = out[p];
             p--;
             attn = 1;
-            j++;/*to not loose j*/
-            //in[j] = -1;
         }
 
     for (j; j >= 0; j--)
@@ -186,7 +126,6 @@ void VictorRecoverSeq(int* in, int indexes[], int n, int max)
             out[p] = in[j];
             last_out = out[p];
             p--;
-            //in[j] = -1;
         }
 
     printf("\nRecover Sequence out[]: \n");
