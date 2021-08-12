@@ -105,7 +105,6 @@ void VictorRecoverSeq(int* in, int indexes[], int n, int max)
     int j;
     int attn=0;
     int maxIndex = max - 1; /*value of max index  in indexes[]*/
-    int p = maxIndex; /* for out[]*/
     int last_index;
     int last_out;
 
@@ -113,9 +112,8 @@ void VictorRecoverSeq(int* in, int indexes[], int n, int max)
         if (indexes[j] == maxIndex)
         {
             last_index = indexes[j];
-            out[p] = in[j];
-            last_out = out[p];
-            p--;
+            out[maxIndex] = in[j];
+            last_out = out[last_index];
             attn = 1;
         }
 
@@ -123,9 +121,8 @@ void VictorRecoverSeq(int* in, int indexes[], int n, int max)
         if ((indexes[j]+1 == last_index) && (in[j]< last_out))
         {
             last_index = indexes[j];
-            out[p] = in[j];
-            last_out = out[p];
-            p--;
+            out[last_index] = in[j];
+            last_out = out[last_index];
         }
 
     printf("\nRecover Sequence out[]: \n");
