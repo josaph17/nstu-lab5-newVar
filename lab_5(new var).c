@@ -8,10 +8,13 @@
 
 #define N 8  
 
-void ShowArray(int in[], int n);
 void cleverSort(int *in, int* in2, int n);
+void ShowArray(int in[], int n);
 void recoverRisingSubSeq(int in[], int* in2, int indexes[], int n, int maxIndex);
-void compareArrs(int* in, int in2[], int n);
+void compareArrsAddMinus1(int* in, int in2[], int n);
+void swap(int *a, int *b);
+void immersionSort0(int in[], int left, int n);
+void immersionSort(int out[], int in[], int sortedIndex, int n);
 
 int main()
 {
@@ -25,16 +28,6 @@ int main()
     cleverSort(Arr,Arr2, N);
 
 	return 0;
-}
-
-void ShowArray(int in[], int n)
-{
-	int i;
-	for (i = 0; i < n; i++)
-	{
-		printf("%d ", in[i]);
-	}
-	printf("\n");
 }
 
 void cleverSort(int* in, int* in2, int n)
@@ -68,14 +61,28 @@ void cleverSort(int* in, int* in2, int n)
     
     printf("\nCount of elements in max rising subSeq: %d\n", maximum+1);
 
-    recoverRisingSubSeq(in, in2, counts, n, maximum);
+    recoverRisingSubSeq(in, in2, counts, n, maximum); 
 
-    compareArrs(in, in2, n);
-
+    compareArrsAddMinus1(in, in2, n);
+    //-----------------------------
     printf("\nChanged Arr[]: \n");
     ShowArray(in, n);
-    printf("After func. recoverRisingSubSeq Arr2[]: \n");
+    printf("After recoverRisingSubSeq Arr2[]: \n");
     ShowArray(in2, n);
+
+    immersionSort(in2, in, maximum, n);
+    printf("After immersionSort Arr2[]: \n");
+    ShowArray(in2, n);
+}
+
+void ShowArray(int in[], int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        printf("%d ", in[i]);
+    }
+    printf("\n");
 }
 
 void recoverRisingSubSeq(int in[], int* in2, int indexes[], int n, int maxIndex)
@@ -103,10 +110,50 @@ void recoverRisingSubSeq(int in[], int* in2, int indexes[], int n, int maxIndex)
         }
 }
 
-void compareArrs(int* in, int in2[], int n)
+void compareArrsAddMinus1(int* in, int in2[], int n)
 {
     for (int i = 0; i < n; ++i)
         for (int j = 0; j < n; j++)
             if (in[i] == in2[j])
                 in[i] = -1;
+}
+
+void swap(int *a, int *b)
+{
+    int tmp = a;
+    a = b;
+    b = tmp;
+}
+void immersionSort(int out[], int in[], int sortedIndex, int n)  
+{
+    int 	i, j, k, c;
+    for (i = sortedIndex+1; i < n; ) /*по массиву in2 бежим*/
+    {
+        for (k = 0; k < n; k++) /*для массива in, который содержит -1*/
+        {
+            if (in[k] != -1)
+            {
+                out[i] = in[k];
+                i++;
+            }        
+        }
+    }
+    immersionSort0(out, sortedIndex + 1, n);
+}
+
+void immersionSort0(int in[], int left, int n)  /*Вставка погружением, по bk35 текст в вопросах без ответов*/   //но у хирьянова это обычная вставка
+/*очередной элемент путем ряда обменов “погружается” до требуемой позиции в уже упорядоченную часть массива*/
+{
+    int 	i, j, k, c;
+    for (i = left; i < n; i++)
+    {
+        for (k = i; k != 0; k--) /*к-- для того чтобы дальше погружать в отсорт часть, пока не встанет на место*/
+        {
+            if (in[k] > in[k - 1]) /*если очередной элемент больше пред. отсорт. - выходим*/
+                break;
+            c = in[k];
+            in[k] = in[k - 1];
+            in[k - 1] = c;
+        }
+    }
 }
