@@ -45,10 +45,14 @@ void cleverSort(int in[], int in2[], int n)
 {
     int counts[N] = {0}; /*array of indexes*/
 
-    for (int j = 1; j < n; j++) {
-        for (int i = 0; i < j; i++) { 
-            if (in[j] > in[i]) {
-                if (counts[j] <= counts[i]) { /*if index of sequence >= i*/
+    for (int j = 1; j < n; j++) 
+    {
+        for (int i = 0; i < j; i++) 
+        { 
+            if (in[j] > in[i]) 
+            {
+                if (counts[j] <= counts[i]) 
+                { /*if index of sequence >= i*/
                     counts[j]++;   /*index of element of growing subSequence, which finished on this element*/
                 }
             }
